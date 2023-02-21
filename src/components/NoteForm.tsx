@@ -4,6 +4,7 @@ import { NoteData, Tag } from "../App";
 import { v4 as uuidV4 } from "uuid";
 import { FormEvent, useRef, useState } from "react";
 import { MultiValue } from "react-select";
+import Button from "./ui/Button";
 
 type NoteFormProps = {
 	onCreateNote: (noteData: NoteData) => void;
@@ -79,16 +80,9 @@ const NoteForm = ({ onCreateNote, onAddTag, availableTags }: NoteFormProps) => {
 				/>
 			</div>
 			<div className="flex justify-end gap-2">
-				<button
-					className="font-semi rounded-sm bg-indigo-500 px-3 py-1
-         text-gray-100"
-				>
-					Save
-				</button>
-				<Link to="..">
-					<button className="rounded-sm px-3 py-1 ring-1 ring-gray-300">
-						Cancel
-					</button>
+				<Button title="save" />
+				<Link to=".." tabIndex={-1}>
+					<Button title="cancel" style="secondary" />
 				</Link>
 			</div>
 		</form>

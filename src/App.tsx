@@ -2,6 +2,9 @@ import { useMemo } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { v4 as uuidV4 } from "uuid";
 import NewNote from "./components/NewNote";
+import Note from "./components/Note";
+import NoteLayout from "./components/NoteLayout";
+import NoteList from "./components/NoteList";
 import useLocalStorage from "./hooks/useLocalStorage";
 
 export type Tag = {
@@ -58,11 +61,16 @@ const App = () => {
 
 	return (
 		<Routes>
-			<Route path="/" element={<h1>HOME</h1>} />
-			<Route path="/:id">
-				<Route index element={<h1>SHOW</h1>} />
+			<Route
+				path="/"
+				element={<NoteList notes={notesWithTags} availableTags={tags} />}
+			/>
+
+			<Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
+				<Route index element={<Note />} />
 				<Route path="edit" element={<h1>EDIT</h1>} />
 			</Route>
+
 			<Route
 				path="/new"
 				element={
@@ -73,6 +81,7 @@ const App = () => {
 					/>
 				}
 			/>
+
 			<Route path="*" element={<Navigate to="/" />} />
 		</Routes>
 	);
