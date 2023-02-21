@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { simplifiedNote } from "./NoteList";
+import Badge from "./ui/Badge";
 
 const NoteCard = ({ id, title, tags }: simplifiedNote) => {
 	return (
@@ -12,12 +13,7 @@ const NoteCard = ({ id, title, tags }: simplifiedNote) => {
 				{tags.length > 0 && (
 					<div className="flex flex-wrap justify-center gap-1">
 						{tags.map(tag => (
-							<span
-								className="rounded-md bg-indigo-500 py-[2px] px-2  text-xs font-bold text-gray-100"
-								key={tag.id}
-							>
-								{tag.label}
-							</span>
+							<Badge key={tag.id} tag={tag} />
 						))}
 					</div>
 				)}

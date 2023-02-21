@@ -5,11 +5,13 @@ import { Note, Tag } from "../App";
 import NoteCard from "./NoteCard";
 import Button from "./ui/Button";
 
-export type simplifiedNote = {
-	id: string;
-	tags: Tag[];
-	title: string;
-};
+// export type simplifiedNote = {
+// 	id: string;
+// 	tags: Tag[];
+// 	title: string;
+// };
+
+export type simplifiedNote = Pick<Note, "id" | "title" | "tags">;
 
 type NoteListProps = {
 	availableTags: Tag[];
@@ -20,21 +22,23 @@ const NoteList = ({ availableTags, notes }: NoteListProps) => {
 	const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 	const [title, setTitle] = useState("");
 
-	const filteredNotes = useMemo(() => {
-		return notes.filter(note => {
-			return (
-				((title === "" ||
-					note.title.toLowerCase().includes(title.toLowerCase())) &&
-					selectedTags.length === 0) ||
-				selectedTags.every(tag =>
-					note.tags.some(noteTag => noteTag.id === tag.id)
-				)
-			);
-		});
-	}, [title, notes, selectedTags]);
+	const filteredNotes = useMemo(
+		() =>
+			notes.filter(note => {
+				return (
+					(title === "" ||
+						note.title.toLowerCase().includes(title.toLowerCase())) &&
+					(selectedTags.length === 0 ||
+						selectedTags.every(tag =>
+							note.tags.some(noteTag => noteTag.id === tag.id)
+						))
+				);
+			}),
+		[title, selectedTags, notes]
+	);
 
 	return (
-		<div className="p-4">
+		<div className="mx-auto max-w-xl p-4">
 			<div className="flex items-center">
 				<h1 className="flex-1 text-2xl font-semibold">Note</h1>
 				<div className="flex gap-3">

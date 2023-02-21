@@ -1,8 +1,10 @@
+import { MouseEvent } from "react";
+
 type ButtonProps = {
 	title: string;
 	type?: "button" | "submit";
 	style?: "primary" | "secondary" | "delete";
-	onClick?: () => void;
+	onClick?: (e?: MouseEvent) => void;
 };
 
 const Button = ({
@@ -15,25 +17,18 @@ const Button = ({
 
 	switch (style) {
 		case "primary":
-			buttonStyle =
-				"bg-indigo-500 text-gray-100 hover:bg-opacity-90  focus:ring-indigo-400  ";
+			buttonStyle = "btn-primary";
 			break;
 		case "secondary":
-			buttonStyle =
-				"text-gray-500 ring-1 ring-gray-500 hover:bg-gray-500 hover:text-gray-100";
+			buttonStyle = "btn-secondary";
 			break;
 		case "delete":
-			buttonStyle =
-				"bg-red-500 text-gray-100 hover:bg-opacity-90  focus:ring-red-400 ";
+			buttonStyle = "btn-delete";
 			break;
 	}
 
 	return (
-		<button
-			className={`rounded-md px-3 py-1 font-semibold capitalize outline-none focus:ring-1 focus:ring-offset-2 ${buttonStyle}`}
-			type={type}
-			onClick={onClick}
-		>
+		<button className={`btn ${buttonStyle}`} type={type} onClick={onClick}>
 			{title}
 		</button>
 	);

@@ -80,7 +80,7 @@ const NoteForm = ({ onCreateNote, onAddTag, availableTags }: NoteFormProps) => {
 				/>
 			</div>
 			<div className="flex justify-end gap-2">
-				<Button title="save" />
+				<Button title="save" type="submit" />
 				<Link to=".." tabIndex={-1}>
 					<Button title="cancel" style="secondary" />
 				</Link>

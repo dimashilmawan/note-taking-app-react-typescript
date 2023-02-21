@@ -22,11 +22,7 @@ type RawNote = {
 	id: string;
 } & RawNoteData;
 
-export type NoteData = {
-	title: string;
-	markdown: string;
-	tags: Tag[];
-};
+export type NoteData = { title: string; markdown: string; tags: Tag[] };
 
 export type Note = {
 	id: string;
@@ -87,3 +83,43 @@ const App = () => {
 	);
 };
 export default App;
+
+//////////////////////////////////////////////////////////////////
+
+// type Note = {
+// 	id: string;
+// 	markdown: string;
+// 	title: string;
+// 	name: string;
+// 	tags: string[];
+// };
+
+// type SimpleNote = Pick<Note, "id" | "name" | "title">;
+
+// // type BadgeProps = {
+// // 	notes:SimpleNote
+// // };
+// type BadgeProps = SimpleNote
+
+// const App = () => {
+// 	const notes: Note = {
+// 		id: "a1",
+// 		markdown: "lorem ipsum dolor sit amet",
+// 		name: "samid",
+// 		tags: ["programming", "java"],
+// 		title: "jobs interview",
+// 	};
+// 	return <Badge {...notes}/>;
+// };
+// export default App;
+
+// const Badge = ({ title }: BadgeProps) => {
+// 	return (
+// 		<div>
+// 			{/* {notes.map(note => (
+// 				<span key={note.id}>{note.title}</span>
+// 			))} */}
+// 			<span>{title}</span>
+// 		</div>
+// 	);
+// };
