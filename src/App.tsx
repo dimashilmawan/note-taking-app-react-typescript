@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { v4 as uuidV4 } from "uuid";
+import EditNote from "./components/EditNote";
+import Layout from "./components/Layout/Layout";
 import NewNote from "./components/NewNote";
 import Note from "./components/Note";
 import NoteLayout from "./components/NoteLayout";
@@ -50,36 +52,86 @@ const App = () => {
 		});
 	};
 
+	const updateNoteHandler = (id: string, { tags, ...data }: NoteData) => {
+		setNotes(prevNotes => {
+			return prevNotes.map(note => {
+				if (note.id === id) {
+					return { ...note, ...data, tagIds: tags.map(tag => tag.id) };
+				} else {
+					return note;
+				}
+			});
+		});
+	};
+
+	const deleteNoteHandler = (id: string) => {
+		setNotes(prevNotes => prevNotes.filter(note => note.id !== id));
+	};
+
 	const addTagHandler = (tag: Tag) => {
 		console.log("ADDTAG", tag);
 		setTags(prevTags => [...prevTags, tag]);
 	};
 
-	return (
-		<Routes>
-			<Route
-				path="/"
-				element={<NoteList notes={notesWithTags} availableTags={tags} />}
-			/>
-
-			<Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
-				<Route index element={<Note />} />
-				<Route path="edit" element={<h1>EDIT</h1>} />
-			</Route>
-
-			<Route
-				path="/new"
-				element={
-					<NewNote
-						onCreateNote={createNoteHandler}
-						availableTags={tags}
-						onAddTag={addTagHandler}
-					/>
+	const updateTagHandler = (id: string, label: string) => {
+		setTags(prevTags => {
+			return prevTags.map(tag => {
+				if (tag.id === id) {
+					return { ...tag, label };
+				} else {
+					return tag;
 				}
-			/>
+			});
+		});
+	};
 
-			<Route path="*" element={<Navigate to="/" />} />
-		</Routes>
+	const deleteTagHandler = (id: string) => {
+		setTags(prevTags => prevTags.filter(tag => tag.id !== id));
+	};
+
+	return (
+		<Layout>
+			<Routes>
+				<Route
+					path="/"
+					element={
+						<NoteList
+							notes={notesWithTags}
+							availableTags={tags}
+							onUpdateTag={updateTagHandler}
+							onDeleteTag={deleteTagHandler}
+						/>
+					}
+				/>
+
+				<Route path="/:id" element={<NoteLayout notes={notesWithTags} />}>
+					<Route index element={<Note onDelete={deleteNoteHandler} />} />
+					<Route
+						path="edit"
+						element={
+							<EditNote
+								onUpdateNote={updateNoteHandler}
+								availableTags={tags}
+								onAddTag={addTagHandler}
+							/>
+						}
+					/>
+				</Route>
+
+				<Route
+					path="/new"
+					element={
+						<NewNote
+							onCreateNote={createNoteHandler}
+							availableTags={tags}
+							onAddTag={addTagHandler}
+						/>
+					}
+				/>
+
+				<Route path="*" element={<Navigate to="/" />} />
+			</Routes>
+		</Layout>
 	);
 };
 export default App;
@@ -99,7 +151,9 @@ export default App;
 // // type BadgeProps = {
 // // 	notes:SimpleNote
 // // };
-// type BadgeProps = SimpleNote
+// type BadgeProps = {
+// 	notes: SimpleNote;
+// };
 
 // const App = () => {
 // 	const notes: Note = {
@@ -109,11 +163,11 @@ export default App;
 // 		tags: ["programming", "java"],
 // 		title: "jobs interview",
 // 	};
-// 	return <Badge {...notes}/>;
+// 	return <Badge notes={notes} />;
 // };
 // export default App;
 
-// const Badge = ({ title }: BadgeProps) => {
+// const Badge = ({ notes: { title } }: BadgeProps) => {
 // 	return (
 // 		<div>
 // 			{/* {notes.map(note => (

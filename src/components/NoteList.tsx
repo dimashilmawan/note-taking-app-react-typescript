@@ -2,8 +2,10 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
 import { Note, Tag } from "../App";
+import EditTagsModal from "./Layout/EditTagsModal";
 import NoteCard from "./NoteCard";
 import Button from "./ui/Button";
+import Title from "./ui/Title";
 
 // export type simplifiedNote = {
 // 	id: string;
@@ -16,11 +18,20 @@ export type simplifiedNote = Pick<Note, "id" | "title" | "tags">;
 type NoteListProps = {
 	availableTags: Tag[];
 	notes: simplifiedNote[];
+	onUpdateTag: (id: string, label: string) => void;
+	onDeleteTag: (id: string) => void;
 };
 
-const NoteList = ({ availableTags, notes }: NoteListProps) => {
+const NoteList = ({
+	availableTags,
+	notes,
+	onUpdateTag,
+	onDeleteTag,
+}: NoteListProps) => {
 	const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
-	const [title, setTitle] = useState("");
+	const [title, setTitle] = useState<string>("");
+	// const [title, setTitle] = useState("");
+	const [modalIsOpen, setModalIsOpen] = useState<boolean>(false);
 
 	const filteredNotes = useMemo(
 		() =>
@@ -38,14 +49,18 @@ const NoteList = ({ availableTags, notes }: NoteListProps) => {
 	);
 
 	return (
-		<div className="mx-auto max-w-xl p-4">
+		<>
 			<div className="flex items-center">
-				<h1 className="flex-1 text-2xl font-semibold">Note</h1>
+				<Title title="Note" styles="flex-1" />
 				<div className="flex gap-3">
 					<Link to="/new" className="outline-none">
 						<Button title="Create" />
 					</Link>
-					<Button title="Edit Tags" style="secondary" />
+					<Button
+						title="Edit Tags"
+						onClick={() => setModalIsOpen(true)}
+						style="secondary"
+					/>
 				</div>
 			</div>
 			<form className="mt-6 flex items-stretch gap-3 ">
@@ -81,7 +96,7 @@ const NoteList = ({ availableTags, notes }: NoteListProps) => {
 					/>
 				</div>
 			</form>
-			<div className="mt-6 grid grid-cols-2 gap-3">
+			<div className="mt-6 grid gap-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
 				{filteredNotes.map(note => (
 					<NoteCard
 						key={note.id}
@@ -91,7 +106,14 @@ const NoteList = ({ availableTags, notes }: NoteListProps) => {
 					/>
 				))}
 			</div>
-		</div>
+			<EditTagsModal
+				onCloseModal={() => setModalIsOpen(false)}
+				modalIsOpen={modalIsOpen}
+				availableTags={availableTags}
+				onUpdateTag={onUpdateTag}
+				onDeleteTag={onDeleteTag}
+			/>
+		</>
 	);
 };
 export default NoteList;

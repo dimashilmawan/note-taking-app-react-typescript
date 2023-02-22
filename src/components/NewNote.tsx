@@ -1,5 +1,6 @@
 import { NoteData, Tag } from "../App";
 import NoteForm from "./NoteForm";
+import Title from "./ui/Title";
 
 type NewNoteProps = {
 	onCreateNote: (noteData: NoteData) => void;
@@ -9,14 +10,14 @@ type NewNoteProps = {
 
 const NewNote = ({ onCreateNote, onAddTag, availableTags }: NewNoteProps) => {
 	return (
-		<div className="p-4">
-			<h1>New Note</h1>
+		<>
+			<Title title="New Note" />
 			<NoteForm
-				onCreateNote={onCreateNote}
+				onSubmit={onCreateNote}
 				onAddTag={onAddTag}
 				availableTags={availableTags}
 			/>
-		</div>
+		</>
 	);
 };
 export default NewNote;

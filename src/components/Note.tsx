@@ -1,12 +1,16 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useNote } from "./NoteLayout";
 
 import ReactMarkdown from "react-markdown";
 import Button from "./ui/Button";
 import Badge from "./ui/Badge";
 
-const Note = () => {
+type NoteProps = {
+	onDelete: (id: string) => void;
+};
+const Note = ({ onDelete }: NoteProps) => {
 	const note = useNote();
+	const navigate = useNavigate();
 	return (
 		<div className="p-4">
 			<div className="flex ">
@@ -24,7 +28,14 @@ const Note = () => {
 					<Link to={`/${note.id}/edit`} tabIndex={-1}>
 						<Button title="Edit" />
 					</Link>
-					<Button title="delete" style="delete" />
+					<Button
+						title="delete"
+						style="delete"
+						onClick={() => {
+							onDelete(note.id);
+							navigate("/");
+						}}
+					/>
 					<Link to="/" tabIndex={-1}>
 						<Button title="back" style="secondary" />
 					</Link>

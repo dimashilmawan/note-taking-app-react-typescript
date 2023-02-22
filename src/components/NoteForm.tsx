@@ -7,21 +7,28 @@ import { MultiValue } from "react-select";
 import Button from "./ui/Button";
 
 type NoteFormProps = {
-	onCreateNote: (noteData: NoteData) => void;
+	onSubmit: (noteData: NoteData) => void;
 	onAddTag: (tag: Tag) => void;
 	availableTags: Tag[];
-};
+} & Partial<NoteData>;
 
-const NoteForm = ({ onCreateNote, onAddTag, availableTags }: NoteFormProps) => {
+const NoteForm = ({
+	onSubmit,
+	onAddTag,
+	availableTags,
+	title = "",
+	markdown = "",
+	tags = [],
+}: NoteFormProps) => {
 	const titleRef = useRef<HTMLInputElement>(null);
 	const markdownRef = useRef<HTMLTextAreaElement>(null);
-	const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+	const [selectedTags, setSelectedTags] = useState<Tag[]>(tags);
 	const navigate = useNavigate();
 
 	const submitHandler = (e: FormEvent) => {
 		e.preventDefault();
 
-		onCreateNote({
+		onSubmit({
 			title: titleRef.current!.value,
 			markdown: markdownRef.current!.value,
 			tags: selectedTags,
@@ -30,7 +37,7 @@ const NoteForm = ({ onCreateNote, onAddTag, availableTags }: NoteFormProps) => {
 	};
 
 	return (
-		<form onSubmit={submitHandler} className="flex flex-col gap-2">
+		<form onSubmit={submitHandler} className="mt-6 flex flex-col gap-2">
 			<div className="flex items-stretch gap-2 ">
 				<div className="flex flex-1 flex-col gap-1  ">
 					<label htmlFor="title">Title</label>
@@ -38,6 +45,7 @@ const NoteForm = ({ onCreateNote, onAddTag, availableTags }: NoteFormProps) => {
 						type="text"
 						ref={titleRef}
 						required
+						defaultValue={title}
 						className="h-full rounded-[3px] px-2 outline-none ring-[0.7px] ring-gray-300 focus:ring-2 focus:ring-indigo-400"
 					/>
 				</div>
@@ -75,6 +83,7 @@ const NoteForm = ({ onCreateNote, onAddTag, availableTags }: NoteFormProps) => {
 				<textarea
 					required
 					ref={markdownRef}
+					defaultValue={markdown}
 					className="rounded-[3px] p-2 outline-none ring-[0.7px] ring-gray-300 focus:ring-2 focus:ring-indigo-400"
 					rows={15}
 				/>
