@@ -5,7 +5,9 @@ type TitleProps = {
 
 const Title = ({ title, styles }: TitleProps) => {
 	return (
-		<h1 className={`text-2xl font-semibold ${styles ? styles : ""}`}>
+		<h1
+			className={`text-3xl font-semibold text-gray-700 ${styles ? styles : ""}`}
+		>
 			{title}
 		</h1>
 	);

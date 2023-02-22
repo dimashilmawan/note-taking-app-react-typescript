@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import ReactSelect from "react-select";
 import { Note, Tag } from "../App";
-import EditTagsModal from "./Layout/EditTagsModal";
+import EditTagsModal from "./ui/EditTagsModal";
 import NoteCard from "./NoteCard";
 import Button from "./ui/Button";
 import Title from "./ui/Title";
@@ -106,13 +106,15 @@ const NoteList = ({
 					/>
 				))}
 			</div>
-			<EditTagsModal
-				onCloseModal={() => setModalIsOpen(false)}
-				modalIsOpen={modalIsOpen}
-				availableTags={availableTags}
-				onUpdateTag={onUpdateTag}
-				onDeleteTag={onDeleteTag}
-			/>
+			{modalIsOpen && (
+				<EditTagsModal
+					onCloseModal={() => setModalIsOpen(false)}
+					modalIsOpen={modalIsOpen}
+					availableTags={availableTags}
+					onUpdateTag={onUpdateTag}
+					onDeleteTag={onDeleteTag}
+				/>
+			)}
 		</>
 	);
 };
